@@ -144,7 +144,7 @@ enviar.onclick = function () {
 let reseter = document.querySelector(".botao_resetar");
 
 reseter.onclick = function () {
-    window.location.href = "http://localhost:63342/Online_MIDI/index.html"
+    window.location.href = "/"
 }
 
 
