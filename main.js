@@ -15,12 +15,6 @@ function tocaSom (seletorAudio) {
     if (elemento && elemento.localName === 'audio') {
         elemento.play(); //toca o áudio
         previousElement = elemento; // aloca no elemento anterior o áudio atual
-
-        // caso a tecla gravar estava habilitada coloca o áudio selecionado na lista de áudios gravados
-        if(gravando) {
-            teclasGravadas.push(seletorAudio.substr(1));
-        }
-
     }
     else {
         //alert('Elemento não encontrado');
@@ -29,28 +23,52 @@ function tocaSom (seletorAudio) {
 
 }
 
+
+function incluirSom(seletorAudio){
+    // caso a tecla gravar estava habilitada coloca o áudio selecionado na lista de áudios gravados
+    if(gravando) {
+        teclasGravadas.push(seletorAudio.substr(1));
+    }    
+}
+
+function pegarParametrosUrl(){
+    return "" + window.location.search
+}
+
 function alterarUrl() {
-    const queryString = "" + window.location.search;
-    if (!(queryString.includes("variavelTeste"))) {
-        window.history.pushState({informacaoAdicional: "Atualizado com JS"}, '', "?variavelTeste=");
+
+    if(teclasGravadas == ""){
+        return;
     }
-    const queryString2 = window.location.search;
-    window.history.pushState({informacaoAdicional: "Atualizado com JS"},'', queryString2 +","+teclasGravadas);
+
+    const queryString = pegarParametrosUrl();
+    if (!(queryString.includes("sons"))) {
+        window.history.pushState(null, '', "?sons=" + teclasGravadas);
+    }else {
+        window.history.pushState(null,'', queryString + "," + teclasGravadas);
+    }
 }
 
 function recarregarUrl() {
     location.reload();
 }
 
+let listening = false;
 const timer = ms => new Promise(res => setTimeout(res, ms))
 async function ouvir() {
-    const listaTeclasOuvir = ("" + window.location.search).split(",");
-    console.log(listaTeclasOuvir);
+
+    let sons = window.location.search.replace('?sons=', '');
+    sons = ("" + sons).split(",");
+    console.log(sons);
 
     ouvidor.classList.add("ouvindo")
     ouvidor.innerHTML = "Escutando"
-    for (let i = 1; i < listaTeclasOuvir.length; i++) {
-        let audioId = "#" + listaTeclasOuvir[i];
+
+    for (let i = 0; i < sons.length; i++) {
+        if(!listening){
+            break;
+        }
+        let audioId = "#" + sons[i];
         console.log(audioId);
         tocaSom(audioId);
         await timer(250);
@@ -75,7 +93,7 @@ function gotowhatsapp() {
         + "Email: " + email  + "%0a"
         + "Mensagem: " + service + "%0a"
         + "Teclas: " + teclas + "%0a"
-        + "Link: " + "http://localhost:63342/Online_MIDI/index.html" + window.location.search;
+        + "Link: " + window.location.protocol + "//" + window.location.host + "/index.html" + window.location.search;
 
     window.open(url, '_blank').focus();
 }
@@ -88,11 +106,13 @@ const listaDeTeclas = document.querySelectorAll('.tecla');
 for (let contador = 0; contador < listaDeTeclas.length; contador++) {
 
     const tecla = listaDeTeclas[contador];
-    const instrumento = tecla.classList[1];
-    const idAudio = `#som_${instrumento}`; //template string
+    let instrumento = tecla.innerHTML.toLowerCase();
+    const idAudio = `#${instrumento}`; //template string
 
     tecla.onclick = function () {
+        // alert(idAudio)
         tocaSom(idAudio);
+        incluirSom(idAudio);
     }
 
     tecla.onkeydown = function (evento) {
@@ -143,14 +163,22 @@ let ouvidor = document.querySelector(".botao_ouvir");
 let ouvindo = false;
 
 ouvidor.onclick = function () {
-    ouvir();
+    listening = !listening;
+    if(listening){
+        ouvir().finally(
+            function(){listening = false;}
+        );
+        
+    }
 }
 
 //enviar
 let enviar = document.querySelector(".botao_enviar");
 
 enviar.onclick = function () {
-    window.open("formulario.html" + window.location.search );
+    if(pegarParametrosUrl().trim() != ""){
+        window.open("formulario.html" + window.location.search );
+    }
 }
 
 //reseter

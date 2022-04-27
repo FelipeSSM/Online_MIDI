@@ -35,18 +35,8 @@
 
     <script>
       window.onload = function () {
-        let sequenciaTeclas = (window.location.search).replace("?variavelTeste=", "");
-        let listaTeclas = sequenciaTeclas.split(",");
-        listaTeclas.shift();
-
-        let listaFinal = [];
-
-        for(let i = 0; i < listaTeclas.length; i++) {
-          let tecla = listaTeclas[i];
-          listaFinal.push(" " + tecla.substr(10));
-        }
-
-        document.querySelector(".teclinha").innerHTML = "" + listaFinal;
+        let sequenciaTeclas = (window.location.search).replace("?sons=", "");
+        document.querySelector(".teclinha").innerHTML = "" + sequenciaTeclas;
 
       }
 
