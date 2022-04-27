@@ -1,9 +1,22 @@
+
+let previousElement;
+
 function tocaSom (seletorAudio) {
+    
+    // pega o elemento html de áudio de acordo com o seletor de áudio
     const elemento = document.querySelector(seletorAudio);
-
+    
+    // pausa o áudio do elemento caso ele seja o anterior ou se ele mesmo ainda estiver tocando
+    if(previousElement != null && (previousElement == elemento || elemento.readyState > 0)){
+        elemento.pause(); // pausa o áudio
+        elemento.currentTime = 0; // reinicia o ponto de início do áudio
+    }
+    
     if (elemento && elemento.localName === 'audio') {
-        elemento.play();
+        elemento.play(); //toca o áudio
+        previousElement = elemento; // aloca no elemento anterior o áudio atual
 
+        // caso a tecla gravar estava habilitada coloca o áudio selecionado na lista de áudios gravados
         if(gravando) {
             teclasGravadas.push(seletorAudio.substr(1));
         }
