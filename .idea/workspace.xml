@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f6a2edbc-3878-4f6f-b84f-7490053cc36c" name="Changes" comment="">
+    <list default="true" id="f6a2edbc-3878-4f6f-b84f-7490053cc36c" name="Changes" comment="Implementação da Funcionalidade de ouvir na Timeline.">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
     </list>
@@ -69,8 +70,16 @@
       <workItem from="1651175298099" duration="746000" />
       <workItem from="1651176651150" duration="689000" />
       <workItem from="1651503271421" duration="6718000" />
-      <workItem from="1651591912030" duration="3256000" />
+      <workItem from="1651591912030" duration="6066000" />
     </task>
+    <task id="LOCAL-00001" summary="Implementação da Funcionalidade de ouvir na Timeline.">
+      <created>1651605638826</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1651605638826</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -86,5 +95,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Implementação da Funcionalidade de ouvir na Timeline." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementação da Funcionalidade de ouvir na Timeline." />
   </component>
 </project>

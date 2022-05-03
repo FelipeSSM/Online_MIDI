@@ -125,7 +125,7 @@ function gotowhatsapp() {
         + "Email: " + email  + "%0a"
         + "Mensagem: " + service + "%0a"
         + "Teclas: " + teclas + "%0a"
-        + "Link: " + window.location.protocol + "//" + window.location.host + "/index.html" + window.location.search;
+        + "Link: " + window.location.protocol + "//" + window.location.host + "/Online_MIDI" + "/index.html" + window.location.search;
 
     window.open(url, '_blank').focus();
 }
@@ -220,7 +220,7 @@ enviar.onclick = function () {
 let reseter = document.querySelector(".botao_resetar");
 
 reseter.onclick = function () {
-    window.location.href = "/"
+    window.location.href = window.location.protocol + "//" + window.location.host + window.location.pathname;
 }
 
 
