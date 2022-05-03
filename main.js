@@ -27,8 +27,17 @@ function tocaSom (seletorAudio) {
 function incluirSom(seletorAudio){
     // caso a tecla gravar estava habilitada coloca o áudio selecionado na lista de áudios gravados
     if(gravando) {
-        teclasGravadas.push(seletorAudio.substr(1));
+        let tempoAtual = new Date().getTime();
+        let tempoEspera = tempoAtual - inicio;
+        teclasGravadas.set(tempoEspera,seletorAudio.substr(1));
     }    
+}
+
+let teclasGravadasFormatado = [];
+function mapParaString() {
+    for (let [key,value] of teclasGravadas) {
+        teclasGravadasFormatado.push(value + "(" + key + ")")
+    }
 }
 
 function pegarParametrosUrl(){
@@ -40,12 +49,13 @@ function alterarUrl() {
     if(teclasGravadas == ""){
         return;
     }
+    mapParaString();
 
     const queryString = pegarParametrosUrl();
     if (!(queryString.includes("sons"))) {
-        window.history.pushState(null, '', "?sons=" + teclasGravadas);
+        window.history.pushState(null, '', "?sons=" + teclasGravadasFormatado);
     }else {
-        window.history.pushState(null,'', queryString + "," + teclasGravadas);
+        window.history.pushState(null,'', queryString + "," + teclasGravadasFormatado);
     }
 }
 
@@ -58,21 +68,43 @@ const timer = ms => new Promise(res => setTimeout(res, ms))
 async function ouvir() {
 
     let sons = window.location.search.replace('?sons=', '');
+    console.log(sons);
     sons = ("" + sons).split(",");
     console.log(sons);
+
+    let sonsTeste1 = [];
+    for(let i = 0; i < sons.length; i++) {
+        let partitura = sons[i];
+        sonsTeste1.push(partitura.replace(")","").split("("));
+    }
+
+    //teste
+    for(let i = 0; i < sonsTeste1.length; i++) {
+        console.log(sonsTeste1[i]);
+    }
+    //teste
 
     ouvidor.classList.add("ouvindo")
     ouvidor.innerHTML = "Escutando"
 
-    for (let i = 0; i < sons.length; i++) {
+    for (let i = 0; i < sonsTeste1.length; i++) {
         if(!listening){
             break;
         }
-        let audioId = "#" + sons[i];
-        console.log(audioId);
-        tocaSom(audioId);
-        await timer(250);
 
+        if( i > 0) {
+            await timer(sonsTeste1[i][1] - sonsTeste1[i-1][1]);
+            let audioId = "#" + sonsTeste1[i][0];
+            console.log(audioId);
+            tocaSom(audioId);
+
+        } else {
+            await timer(sonsTeste1[i][1]);
+            let audioId = "#" + sonsTeste1[i][0];
+            console.log(audioId);
+            tocaSom(audioId);
+
+        }
     }
 
     ouvidor.classList.remove("ouvindo")
@@ -135,13 +167,16 @@ for (let contador = 0; contador < listaDeTeclas.length; contador++) {
 //Gravador
 let gravador = document.querySelector(".botao_gravador");
 let gravando = false;
-let teclasGravadas = [];
+let teclasGravadas = new Map();
+let inicio;
 
 gravador.onclick = function () {
     if(!gravando) {
 
         gravador.classList.add("gravando");
         gravador.innerHTML = "Parar"
+
+        inicio = new Date().getTime();
 
         gravando = true;
 
