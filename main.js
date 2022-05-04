@@ -25,7 +25,7 @@ function tocaSom (seletorAudio) {
 
 
 function incluirSom(seletorAudio){
-    // caso a tecla gravar estava habilitada coloca o áudio selecionado na lista de áudios gravados
+    // caso a tecla gravar estava habilitada coloca o áudio selecionado na lista de áudios gravados junto com seu timer
     if(gravando) {
         let tempoAtual = new Date().getTime();
         let tempoEspera = tempoAtual - inicio;
@@ -35,6 +35,7 @@ function incluirSom(seletorAudio){
 
 let teclasGravadasFormatado = [];
 function mapParaString() {
+    //transforma o map de teclas e timers em uma string.
     for (let [key,value] of teclasGravadas) {
         teclasGravadasFormatado.push(value + "(" + key + ")")
     }
@@ -45,7 +46,7 @@ function pegarParametrosUrl(){
 }
 
 function alterarUrl() {
-
+    //Altera a URL adicionando as teclas gravadas e seus timers para a URL
     if(teclasGravadas == ""){
         return;
     }
@@ -66,41 +67,43 @@ function recarregarUrl() {
 let listening = false;
 const timer = ms => new Promise(res => setTimeout(res, ms))
 async function ouvir() {
+    //Ouve as teclas salvas na URL (Teclas Gravadas) em sequencia, e dentro da time line gravada.
+    await timer(1000);
 
     let sons = window.location.search.replace('?sons=', '');
     console.log(sons);
     sons = ("" + sons).split(",");
     console.log(sons);
 
-    let sonsTeste1 = [];
+    let sonsComTimer = [];
     for(let i = 0; i < sons.length; i++) {
         let partitura = sons[i];
-        sonsTeste1.push(partitura.replace(")","").split("("));
+        sonsComTimer.push(partitura.replace(")","").split("("));
     }
 
     //teste
-    for(let i = 0; i < sonsTeste1.length; i++) {
-        console.log(sonsTeste1[i]);
+    for(let i = 0; i < sonsComTimer.length; i++) {
+        console.log(sonsComTimer[i]);
     }
     //teste
 
     ouvidor.classList.add("ouvindo")
     ouvidor.innerHTML = "Escutando"
 
-    for (let i = 0; i < sonsTeste1.length; i++) {
+    for (let i = 0; i < sonsComTimer.length; i++) {
         if(!listening){
             break;
         }
 
         if( i > 0) {
-            await timer(sonsTeste1[i][1] - sonsTeste1[i-1][1]);
-            let audioId = "#" + sonsTeste1[i][0];
+            await timer(sonsComTimer[i][1] - sonsComTimer[i-1][1]);
+            let audioId = "#" + sonsComTimer[i][0];
             console.log(audioId);
             tocaSom(audioId);
 
         } else {
-            await timer(sonsTeste1[i][1]);
-            let audioId = "#" + sonsTeste1[i][0];
+            await timer(sonsComTimer[i][1]);
+            let audioId = "#" + sonsComTimer[i][0];
             console.log(audioId);
             tocaSom(audioId);
 
@@ -112,6 +115,7 @@ async function ouvir() {
 }
 
 function gotowhatsapp() {
+    //Envia Todas as informações salvas no formulário para o whatsapp.
 
     var name = document.getElementById("nomesobrenome").value;
     var phone = document.getElementById("email").value;
